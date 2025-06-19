@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Girls Meetup Invitation</title>
@@ -199,17 +199,16 @@
             <button class="agree-btn" id="agreeBtn">I ACCEPT THESE TERMS</button>
         </div>
         
-       <!-- Invitation (now shows your exact uploaded image) -->
-<div class="invitation" id="invitation">
- img src="https://placehold.co/400x600/pink/white?text=Girls+Meetup+Invitation" alt="Girls Meetup Invitation">
-</div>
+        <!-- Invitation (now shows your correct image) -->
+        <div class="invitation" id="invitation">
+            <img src="https://i.postimg.cc/Y06pvRR3/image-png.png" alt="Girls Meetup Invitation">
+        </div>
         
         <!-- Confetti Container -->
         <div id="confettiContainer"></div>
     </div>
 
     <script>
-        // DOM Elements
         const overlay = document.getElementById('scratchOverlay');
         const warningScreen = document.getElementById('warningScreen');
         const invitation = document.getElementById('invitation');
@@ -218,13 +217,11 @@
         const progressPercent = document.getElementById('progressPercent');
         const confettiContainer = document.getElementById('confettiContainer');
         
-        // Variables
         let isScratching = false;
         let totalScratched = 0;
         const totalToScratch = 1500;
         let progress = 0;
         
-        // Create confetti elements
         for (let i = 0; i < 100; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
@@ -237,16 +234,13 @@
         }
         const confettiElements = document.querySelectorAll('.confetti');
         
-        // Initialize - hide invitation initially
         invitation.style.display = 'none';
         warningScreen.style.display = 'none';
         
-        // Prevent text selection
         document.addEventListener('selectstart', (e) => {
             if (isScratching) e.preventDefault();
         });
         
-        // Mouse Events
         overlay.addEventListener('mousedown', (e) => { 
             isScratching = true;
             scratch(e.clientX, e.clientY);
@@ -263,7 +257,6 @@
             e.preventDefault();
         });
         
-        // Touch Events
         overlay.addEventListener('touchstart', (e) => { 
             isScratching = true;
             const touch = e.touches[0];
@@ -282,54 +275,45 @@
             e.preventDefault();
         });
         
-        // Agree Button
         agreeBtn.addEventListener('click', () => {
             warningScreen.style.display = 'none';
             invitation.style.display = 'flex';
             overlay.style.display = 'none';
         });
         
-        // Scratch Function
         function scratch(x, y) {
             const rect = overlay.getBoundingClientRect();
             const xPos = x - rect.left;
             const yPos = y - rect.top;
             
-            // Only scratch if within bounds
             if (xPos < 0 || xPos > rect.width || yPos < 0 || yPos > rect.height) return;
             
-            // Create visible scratch mark
             const scratchMark = document.createElement('div');
             scratchMark.className = 'scratch-mark';
             scratchMark.style.left = (xPos - 15) + 'px';
             scratchMark.style.top = (yPos - 15) + 'px';
             overlay.appendChild(scratchMark);
             
-            // Create permanent scratch hole
             const scratchHole = document.createElement('div');
             scratchHole.className = 'scratch-hole';
             scratchHole.style.left = (xPos - 15) + 'px';
             scratchHole.style.top = (yPos - 15) + 'px';
             overlay.appendChild(scratchHole);
             
-            // Remove mark after animation
             setTimeout(() => {
                 scratchMark.style.opacity = '0';
                 scratchMark.style.transition = 'all 0.5s ease-out';
                 setTimeout(() => scratchMark.remove(), 500);
             }, 100);
             
-            // Update progress
             totalScratched += 30;
             progress = Math.min(100, Math.floor((totalScratched / totalToScratch) * 100));
             progressBar.style.width = progress + '%';
             progressPercent.textContent = progress + '%';
             
-            // Check if complete
             if (progress >= 100) {
                 overlay.style.pointerEvents = 'none';
                 
-                // Show confetti animation
                 confettiElements.forEach((c, i) => {
                     setTimeout(() => {
                         c.style.opacity = '1';
@@ -338,7 +322,6 @@
                     }, i * 30);
                 });
                 
-                // Show warning screen after animation
                 setTimeout(() => {
                     warningScreen.style.display = 'flex';
                 }, 1500);
